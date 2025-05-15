@@ -1,0 +1,8 @@
+# This file may be used to create an environment using:
+# $ conda create --name <env> --file <this file>
+# platform: osx-64
+# created-by: conda 25.1.1
+fastp=0.23.4=h1d47e6f_5
+isa-l=2.31.0=hfdf4475_2
+libcxx=18.1.8=hd876a4e_7
+libdeflate=1.21=hfdf4475_0
