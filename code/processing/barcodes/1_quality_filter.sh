@@ -1,5 +1,4 @@
 #!/bin/bash
-GROUP=${1:-1}
 # Find working directiory
 PARENT_PATH=$(dirname $(greadlink -f $0))
 
@@ -20,14 +19,18 @@ else
 fi
 
 
-# Find read
-READ_DNA=$(find $FOLDER -name $GROUP"*DNA.fastq.gz")
-READ_RNA=$(find $FOLDER -name $GROUP"*RNA.fastq.gz")
-
-# Define output file paths
-OUT_DNA=$OUT_FOLDER"/"$GROUP"_DNA.fastq.gz"
-OUT_RNA=$OUT_FOLDER"/"$GROUP"_RNA.fastq.gz"
-
-# Define string to be ran on the termina
-mamba run -n fastp fastp --in1 $READ_DNA --out1 $OUT_DNA --trim_tail1 '6'  --verbose --disable_length_filtering --thread '6' --n_base_limit '0'
-mamba run -n fastp fastp --in1 $READ_RNA --out1 $OUT_RNA --trim_tail1 '6'  --verbose --disable_length_filtering --thread '6' --n_base_limit '0'
+# iterate through all sequencing files
+for file in "$FOLDER"/*.fastq.gz; do
+  if [ -f "$file" ]; then
+    # get length to trim
+    TRIM_LENGTH=$(gzip -cd "$file" | awk 'NR==2 {print length-20; exit}')
+    # extract file name
+    fname=$(basename "$file")   
+    # extract sample name
+    id=${fname%%_S*}   
+    # set path to output
+    OUT=$OUT_FOLDER"/"$id".fastq.gz"
+    # run filter
+    mamba run -n fastp fastp --in1 $file --out1 $OUT --trim_tail1 $TRIM_LENGTH  --verbose --disable_length_filtering --thread '6' --n_base_limit '0'
+  fi
+done

@@ -12,7 +12,7 @@ PARENT_PATH=${PARENT_PATH%/*}
 
 # Find data directory
 FOLDER=$PARENT_PATH'/data/filtered_sequencing/barcodes'
-OUT_DIR=$PARENT_PATH'/data/extracted_barcodes/barcodes'
+OUT_DIR=$PARENT_PATH'/data/extracted_barcodes'
 
 # Make directories for stored data
 mkdir $OUT_DIR

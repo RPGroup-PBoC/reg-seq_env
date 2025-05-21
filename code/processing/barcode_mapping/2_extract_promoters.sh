@@ -19,8 +19,7 @@ INFOLDER=$PARENT_PATH'/data/filtered_sequencing/mapping/'
 
 # Make directories for stored data
 mkdir $PARENT_PATH'/data/extracted_pairs/'
-mkdir $PARENT_PATH'/data/extracted_pairs/mapping/'
-OUT_FOLDER=$PARENT_PATH'/data/extracted_pairs/mapping/'
+OUT_FOLDER=$PARENT_PATH'/data/extracted_pairs/'
 
 # Reset temp folder
 rm -rf $OUT_FOLDER'/temp/'
