@@ -1,6 +1,11 @@
 import matplotlib
 from matplotlib import font_manager
 import os
+import numpy as np
+import matplotlib.patches as patches
+
+import matplotlib.pyplot as plt
+from matplotlib.colors import LinearSegmentedColormap, Normalize
 
 # Inspired by Griffin Chure
 
@@ -161,3 +166,61 @@ my_color_dict = {
     "gray2": "#7e7e7e", 
     "gray3": "#bdbdbd",
 }
+
+
+
+def plot_exshift(expression_shift, xscale=1, position_offset=-115):
+    colors_with_points = [
+            (0, "#63ACBE"),  
+            (0.1, "#63ACBE"),  
+            (.5, "#ffffff"),    
+            (0.9, "#EF875F"),
+            (1, "#EF875F")
+        ]
+    
+        # Build the colormap
+    my_cmap = LinearSegmentedColormap.from_list("my_cmap",colors_with_points)
+    # data dimensions
+    
+    rows, cols = expression_shift.shape
+
+    # Determine symmetric normalization centered at zero
+    max_abs_val = np.max(np.abs(expression_shift))
+    norm = Normalize(vmin=-max_abs_val, vmax=max_abs_val)
+    # set figure size proportional to data dimensions
+    fig_width = cols * 0.2/xscale  # adjust 0.2 as needed for scaling
+    fig_height = rows * 0.2
+    fig, ax = plt.subplots(figsize=(fig_width, fig_height))
+
+   # Iterate and draw rectangles colored by expression_shift
+    for row in np.arange(rows):
+        for col in np.arange(cols):
+        # Normalize the value to [0,1] for colormap
+            norm_value = norm(expression_shift[row, col])
+            color = my_cmap(norm_value)
+            
+            rect = patches.Rectangle(
+                ((col+position_offset)/xscale-0.5/xscale, row-0.5), 1/xscale, 1,
+                linewidth=0, facecolor=color
+            )
+            ax.add_patch(rect)
+
+    # Set axis limits
+    ax.set_xlim(-115.5/xscale, 44.5/xscale)
+    ax.set_ylim(-0.5, 3.5)
+
+    # Optional: remove axes for cleaner visualization
+    #ax.axis('off')
+
+    width_pts = 100  
+    height_pts = 40
+    dpi = 100
+    
+    # Calculate figsize in inches
+    width_in = get_pixels(width_pts) / dpi
+    height_in = get_pixels(height_pts) / dpi
+    #fig.set_size_inches(width_in, height_in)
+    ax.set_yticks([0, 1, 2, 3], ['A', 'C', 'G', 'T'], fontsize=2)
+    ax.set_xticks(np.arange(-115, 45, step=10)/xscale, np.arange(-115, 45, step=10), fontsize=2)
+    ax.grid(False)
+    return fig, ax

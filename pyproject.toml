@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools >= 61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "regseq2"
+version = "0.0.1"
+dependencies = [
+  "matplotlib",
+  "numpy",
+  "pandas",
+  "hmmlearn"
+]
+authors = [
+  {name = "Tom Röschinger", email = "tom@roeschinger.de"}
+]
+readme = "README.md"
+
+[project.urls]
+Repository = "https://github.com/RPGroup-PBoC/Reg-Seq25"
