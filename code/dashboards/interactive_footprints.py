@@ -108,7 +108,7 @@ def load_js(fname, args):
 bokeh_theme()
 
 # Path to store html file
-bokeh.io.output_file('interactive_footprints.html')
+bokeh.io.output_file('rp_alt_interactive_footprints.html')
 
 
 
@@ -132,7 +132,7 @@ collapse_df = pd.DataFrame()
 df_gc = pd.read_csv("../../data/metadata/growth_conditions_short.csv", delimiter=';')
 
 # Go through all files and compact the data
-for file in glob.glob("../../data/footprints/*"):
+for file in glob.glob("../../data/rp_alt_footprints/*"):
     
     df = pd.read_csv(file)
     for promoter, group in df.groupby('promoter'):
@@ -556,7 +556,7 @@ regulonDB_desc)
 bokeh.io.save(plot)
 
 # Remove first line from html document
-with open(r'interactive_footprints.html', 'r+') as fp:
+with open(r'rp_alt_interactive_footprints.html', 'r+') as fp:
     # read an store all lines into list
     lines = fp.readlines()
     # move file pointer to the beginning of a file
