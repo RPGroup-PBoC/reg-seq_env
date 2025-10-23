@@ -4,22 +4,15 @@
 group=${1:-100}
 
 # Find parent path
-PARENT_PATH=$(dirname $(greadlink -f $0))
-result=${PARENT_PATH##*/}
+# Find working directiory
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-# Go back path
-PARENT_PATH=${PARENT_PATH%/*}
-PARENT_PATH=${PARENT_PATH%/*}
-PARENT_PATH=${PARENT_PATH%/*}
 
-# Set custom path if data is stored outside github repo
-
-# Find data directory
-INFOLDER=$PARENT_PATH'/data/filtered_sequencing/mapping/'
+INFOLDER=$SCRIPT_DIR'/../../../data/filtered_sequencing/mapping/'
 
 # Make directories for stored data
-mkdir $PARENT_PATH'/data/extracted_pairs/'
-OUT_FOLDER=$PARENT_PATH'/data/extracted_pairs/'
+mkdir $SCRIPT_DIR'/../../../data/extracted_pairs/'
+OUT_FOLDER=$SCRIPT_DIR'/../../../data/extracted_pairs/'
 
 # Reset temp folder
 rm -rf $OUT_FOLDER'/temp/'

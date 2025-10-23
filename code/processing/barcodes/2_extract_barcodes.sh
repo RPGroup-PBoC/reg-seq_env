@@ -2,17 +2,12 @@
 
 # index for files
 GROUP=${1:-1}
-PARENT_PATH=$(dirname $(greadlink -f $0))
-result=${PARENT_PATH##*/}
 
-# Go back path
-PARENT_PATH=${PARENT_PATH%/*}
-PARENT_PATH=${PARENT_PATH%/*}
-PARENT_PATH=${PARENT_PATH%/*}
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-# Find data directory
-FOLDER=$PARENT_PATH'/data/filtered_sequencing/barcodes'
-OUT_DIR=$PARENT_PATH'/data/extracted_barcodes'
+
+FOLDER=$SCRIPT_DIR'/../../../data/filtered_sequencing/barcodes'
+OUT_DIR=$SCRIPT_DIR'/../../../data/extracted_barcodes'
 
 # Make directories for stored data
 mkdir $OUT_DIR

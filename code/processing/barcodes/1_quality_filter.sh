@@ -1,15 +1,9 @@
 #!/bin/bash
-# Find working directiory
-PARENT_PATH=$(dirname $(greadlink -f $0))
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-# Go back path
-PARENT_PATH=${PARENT_PATH%/*}
-PARENT_PATH=${PARENT_PATH%/*}
-PARENT_PATH=${PARENT_PATH%/*}
 
-# Data FOLDER
-FOLDER=$PARENT_PATH'/data/sequencing_reads/barcodes/'
-OUT_FOLDER=$PARENT_PATH'/data/filtered_sequencing/barcodes/'
+FOLDER=$SCRIPT_DIR'/../../../data/sequencing_reads/barcodes/'
+OUT_FOLDER=$SCRIPT_DIR'/../../../data/filtered_sequencing/barcodes/'
 
 if [ -d $OUT_FOLDER ] 
 then
@@ -31,6 +25,6 @@ for file in "$FOLDER"/*.fastq.gz; do
     # set path to output
     OUT=$OUT_FOLDER"/"$id".fastq.gz"
     # run filter
-    mamba run -n fastp fastp --in1 $file --out1 $OUT --trim_tail1 $TRIM_LENGTH  --verbose --disable_length_filtering --thread '6' --n_base_limit '0'
+    mamba run -n regseq2 fastp --in1 $file --out1 $OUT --trim_tail1 $TRIM_LENGTH  --verbose --disable_length_filtering --thread '6' --n_base_limit '0'
   fi
 done
