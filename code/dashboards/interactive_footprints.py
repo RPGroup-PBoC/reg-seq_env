@@ -108,7 +108,7 @@ def load_js(fname, args):
 bokeh_theme()
 
 # Path to store html file
-bokeh.io.output_file('rp_alt_interactive_footprints.html')
+bokeh.io.output_file('interactive_footprints.html')
 
 
 
@@ -132,8 +132,7 @@ collapse_df = pd.DataFrame()
 df_gc = pd.read_csv("../../data/metadata/growth_conditions_short.csv", delimiter=';')
 
 # Go through all files and compact the data
-for file in glob.glob("../../data/rp_alt_footprints/*"):
-    
+for file in glob.glob("../../data/footprints/*"):
     df = pd.read_csv(file)
     for promoter, group in df.groupby('promoter'):
         gc = file.split('/')[-1].split('-')[0]
@@ -146,6 +145,25 @@ for file in glob.glob("../../data/rp_alt_footprints/*"):
             'promoter': promoter,
             'replicate': rep,
             'growth_condition': df_gc[df_gc['Index'] == int(gc)]['Condition'].values[0],
+            'norm': 0
+            })])
+        
+
+# Go through all files and compact the data
+for file in glob.glob("../../data/alt_footprints/*"):
+    df = pd.read_csv(file)
+    for promoter, group in df.groupby('promoter'):
+        gc = file.split('/')[-1].split('-')[0]
+        rep = file.split('/')[-1].split('_')[0][-1]
+        x = group.pos.values
+        y = group.mut_info.values
+        collapse_df = pd.concat([collapse_df, pd.DataFrame(data={
+            'mut_info':[y], 
+            'pos': [x], 
+            'promoter': promoter,
+            'replicate': rep,
+            'growth_condition': df_gc[df_gc['Index'] == int(gc)]['Condition'].values[0],
+            'norm': 1
             })])
         
 collapse_df = collapse_df.loc[[r not in ['ybeDp2', 'galEp'] for r in collapse_df.promoter], :]
@@ -217,6 +235,7 @@ gc_ini = 'arabinose'
 d_ini = 2
 smoothing_type = "gaussian"
 sigma_ini = 2
+norm_ini = False
 
 
 
@@ -224,7 +243,8 @@ wt_seq = df_meta.loc[df_meta['promoter'] == prom_ini, "promoter_seq"].values[0]
 
 # populate datasources with initial values
 _df = collapse_df.loc[(collapse_df['promoter'] == prom_ini) 
-           & (collapse_df['growth_condition'] == gc_ini),
+           & (collapse_df['growth_condition'] == gc_ini)
+           & (collapse_df['norm'] == norm_ini),
            ['pos', 'mut_info', 'replicate']]
 
 
@@ -358,7 +378,7 @@ sigma_slider = Slider(start=0.2, end=4, value=2, step=.2)
 d_selector = Select(options=[str(x) for x in np.arange(6)], value=str(d_ini))
 smooth_selector = Select(options=["gaussian", "flat"], value=str("gaussian"))
 hmm_checkbox = Checkbox(label='Inferred Binding Sites', active=False)
-
+norm_checkbox = Checkbox(label='Normalized', active=norm_ini)
 
 
 # titles for selectors
@@ -503,6 +523,7 @@ args = {
     'p_cvs': p_cvs,
     'hmm_checkbox': hmm_checkbox,
     'hmm': hmm,
+    'norm_checkbox': norm_checkbox
 }
 
 
@@ -520,13 +541,17 @@ for s in [smooth_selector, d_selector, sigma_slider, sigma_slider]:
 
 checkbox_cb =  load_js(['set_params_checkbox.js', 'data.js', 'functions.js', 'footprint_selector.js'], args=args)
 hmm_checkbox.js_on_change('active', checkbox_cb)
+
+norm_checkbox_cb =  load_js(['data.js', 'functions.js', 'footprint_selector.js', 'cv.js'], args=args)
+norm_checkbox.js_on_change('active', norm_checkbox_cb)
 selector_box = bokeh.layouts.row(
     bokeh.layouts.column(
         prom_title, 
         prom_selector,
         gc_title,
         gc_selector,
-        hmm_checkbox
+        hmm_checkbox,
+        norm_checkbox
         
     ),
     bokeh.layouts.column( 
@@ -556,7 +581,7 @@ regulonDB_desc)
 bokeh.io.save(plot)
 
 # Remove first line from html document
-with open(r'rp_alt_interactive_footprints.html', 'r+') as fp:
+with open(r'interactive_footprints.html', 'r+') as fp:
     # read an store all lines into list
     lines = fp.readlines()
     # move file pointer to the beginning of a file

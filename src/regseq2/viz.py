@@ -23,7 +23,7 @@ def matplotlib_style(return_colors=True, return_palette=True, **kwargs):
 
     # Get font
     
-    font_path = "/Users/tomroeschinger/Library/Fonts/LucidaSansOT.otf" 
+    font_path = "/Users/tomroeschinger/Library/Fonts/Lucida-Sans-Unicode-Regular.ttf" 
     if os.path.exists(font_path):
         font_manager.fontManager.addfont(font_path)
         prop = font_manager.FontProperties(fname=font_path)
@@ -33,7 +33,7 @@ def matplotlib_style(return_colors=True, return_palette=True, **kwargs):
         # Axes formatting
         "axes.facecolor": "#f7f7fa",
         "axes.edgecolor": "#ffffff",
-        "axes.labelcolor": "#5b5b5b",
+        "axes.labelcolor": "#000000",
         "axes.spines.right": False,
         "axes.spines.top": False,
         "axes.spines.left": True,
@@ -77,8 +77,8 @@ def matplotlib_style(return_colors=True, return_palette=True, **kwargs):
         "legend.edgecolor": "#5b5b5b",
 
         # Tick formatting
-        "xtick.color": "#5b5b5b",
-        "ytick.color": "#5b5b5b",
+        "xtick.color": "#000000",
+        "ytick.color": "#000000",
         "xtick.labelsize": 8,
         "ytick.labelsize": 8,
         "xtick.major.size": 0,
@@ -93,7 +93,7 @@ def matplotlib_style(return_colors=True, return_palette=True, **kwargs):
         # General Font styling
         "font.weight": 400, # Weight of all fonts unless overriden.
         "font.style": "normal",
-        "text.color": "#5b5b5b",
+        "text.color": "#000000",
 
         # Higher-order things
         "pdf.fonttype": 42,

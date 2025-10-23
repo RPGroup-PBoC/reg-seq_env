@@ -1,7 +1,18 @@
 // Get data for footprints
 var prom_inds = getAllIndexes(source_data['promoter'], prom);
 var gc_inds = getAllIndexes(source_data['growth_condition'], gc);
+if (norm_checkbox.active){
+    var norm = 1;
+}
+else{
+    var norm = 0;
+}
+var norm_inds = getAllIndexes(source_data['norm'], norm); 
+
+console.log(norm_inds)
+
 var filteredArray = prom_inds.filter(value => gc_inds.includes(value));
+var filteredArray = filteredArray.filter(value => norm_inds.includes(value));
 
 // Get data for expression shifts
 var prom_inds_ex = getAllIndexes(exshift_data['promoter'], prom);
@@ -64,6 +75,6 @@ for (var i=1; i<4; i=i+1){
 
 
 
-//console.log(display)
+console.log(display)
 data_display.change.emit();
 exshift_display.change.emit();

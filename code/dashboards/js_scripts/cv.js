@@ -1,10 +1,13 @@
 // Get indexes for all promoter and gc data
 var prom_inds = getAllIndexes(source_data['promoter'], prom);
 var gc_inds = getAllIndexes(source_data['growth_condition'], gc);
+var norm_inds = getAllIndexes(source_data['norm'], norm);
 
-var overlap_inds = prom_inds.filter(value => gc_inds.includes(value))
+var overlap_inds_norm = prom_inds.filter(value => norm_inds.includes(value))
+var overlap_inds = overlap_inds_norm.filter(value => gc_inds.includes(value))
 
-var x = new Array(prom_inds.length);
+
+var x = new Array(overlap_inds_norm.length);
 
 // go through conditions
 
@@ -12,14 +15,14 @@ var rep_indexes = [];
 var inds = [];
 var reps = [];
 
-for (j=0; j<prom_inds.length; j=j+1){
-    var mut_info = smooth_info(prom_inds[j], smooth_selector);
+for (j=0; j<overlap_inds_norm.length; j=j+1){
+    var mut_info = smooth_info(overlap_inds_norm[j], smooth_selector);
     var cv = calculateCV(mut_info);
     x[j] = cv;
 
-    if (overlap_inds.includes(prom_inds[j])){
-        reps.push(source_data['replicate'][prom_inds[j]]);
-        rep_indexes.push(prom_inds[j]);
+    if (overlap_inds.includes(overlap_inds_norm[j])){
+        reps.push(source_data['replicate'][overlap_inds_norm[j]]);
+        rep_indexes.push(overlap_inds_norm[j]);
         inds.push(j);
     }
 }
@@ -36,7 +39,7 @@ if (rep_indexes.length < 3){
 // find coordinates for points
 for (i=0; i<reps.length; i=i+1){
     cv_point_gc['x_'+reps[i]] = [calculateCV(smooth_info(rep_indexes[i], smooth_selector))];
-    cv_point_gc['y_'+reps[i]] = [(sorted_indexes.indexOf(inds[i])+1)/prom_inds.length];
+    cv_point_gc['y_'+reps[i]] = [(sorted_indexes.indexOf(inds[i])+1)/overlap_inds_norm.length];
 }
 
 
@@ -57,7 +60,8 @@ cds_cv_point_gc.change.emit();
 for (i=1;i<4;i=i+1){
     // go through promoters
     let rep_inds = getAllIndexes(source_data['replicate'], ""+i);
-    let filteredArray_reps = gc_inds.filter(value => rep_inds.includes(value));
+    let filteredArray_reps_temp = gc_inds.filter(value => rep_inds.includes(value));
+    let filteredArray_reps = filteredArray_reps_temp.filter(value => norm_inds.includes(value));
     
     if (filteredArray_reps.length == 0) {
         cv_point_prom['x_'+i] = [NaN];
