@@ -9,6 +9,7 @@ dependencies:
   - numba
   - seaborn
   - openpyxl
+  - pymongo
   - matplotlib==3.10.7
   - ipykernel
   - scikit-learn==1.7.2
