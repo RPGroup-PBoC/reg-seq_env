@@ -4,8 +4,13 @@ channels:
   - bioconda
 dependencies:
   - biopython==1.84
+  - numpy
+  - pandas
+  - numba
+  - seaborn
+  - openpyxl
   - matplotlib==3.10.7
-  - numpy==2.3.4
+  - ipykernel
   - scikit-learn==1.7.2
   - scipy==1.16.2
   - fastp==1.0.1
