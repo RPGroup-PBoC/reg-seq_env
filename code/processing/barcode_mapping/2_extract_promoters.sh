@@ -20,7 +20,8 @@ mkdir $OUT_FOLDER'/temp/'
 
 # Command to combine barcodes and promoters
 command=paste
-for i in $INFOLDER*$group*.gz; do
+for i in $INFOLDER*$group*R*filtered.fastq.gz; do
+    echo $i
     command="$command <(gunzip -cd $i)"
 done
 

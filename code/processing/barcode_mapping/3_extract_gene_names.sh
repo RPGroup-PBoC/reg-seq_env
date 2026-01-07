@@ -26,7 +26,7 @@ $BBMAP_PATH ref=$SCRIPT_DIR'/../../../data/metadata/wt_sequences.fasta' path=$OU
 gunzip -c $DATA_PATH/$GROUP'_collapsed.fasta.gz' > $DATA_PATH/$GROUP'_collapsed.fasta'
 $BBMAP_PATH ambiguous='best' indelfilter='0' nfilter='0' minid='0.85' trimreaddescriptions='t' in=$DATA_PATH/$GROUP'_collapsed.fasta' out=$SAM_FILE t='8' path=$OUT_FOLDER
 
-rm -f $DATA_PATH/$group'_collapsed.fasta'
+rm -f $DATA_PATH/$GROUP'_collapsed.fasta'
 
 # # Start the process
 START=$SECONDS
