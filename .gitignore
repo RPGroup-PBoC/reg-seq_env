@@ -177,3 +177,5 @@ cython_debug/
 fastp.html
 fastp.json
 data
+
+*.pdf
