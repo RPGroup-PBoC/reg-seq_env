@@ -1,2 +1,0 @@
-# Computational binding site scanning
-
